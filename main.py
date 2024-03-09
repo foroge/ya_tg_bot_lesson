@@ -2,6 +2,7 @@ import logging
 from telegram.ext import Application, MessageHandler, filters
 from telegram.ext import CommandHandler
 from telegram import ReplyKeyboardMarkup
+import time
 
 
 # Запускаем логгирование
@@ -23,6 +24,13 @@ async def echo(update, context):
     await update.message.reply_text(f"Я получил сообщение: '{update.message.text}'")
 
 
+async def time_get(update, context):
+    await update.message.reply_text(time.asctime().split()[3])
+
+
+async def date_get(update, context):
+    await update.message.reply_text(" ".join(time.asctime().split()[:3]))
+
 
 def main():
     # Создаём объект Application.
@@ -38,7 +46,8 @@ def main():
 
     # Регистрируем обработчик в приложении.
     application.add_handler(text_handler)
-
+    application.add_handler(CommandHandler("time", time_get))
+    application.add_handler(CommandHandler("date", date_get))
 
     # Запускаем приложение.
     application.run_polling()
